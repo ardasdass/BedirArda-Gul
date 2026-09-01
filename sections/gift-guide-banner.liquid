@@ -1,15 +1,8 @@
 {{ 'gift-guide-banner.css' | asset_url | stylesheet_tag }}
 
-{%- liquid
-  assign hero_background = ''
-  if section.settings.background_image != blank
-    assign hero_background = section.settings.background_image | image_url: width: 1800
-  endif
--%}
-
 <section
   class="gift-guide-banner"
-  style="--gift-guide-background: url('{{ hero_background }}');"
+  style="--gift-guide-background: url('{{ 'gift-guide-illustration.svg' | asset_url }}');"
   aria-label="{{ section.settings.banner_title | escape }}"
 >
   <header class="gift-guide-banner__header">
@@ -31,6 +24,9 @@
   </header>
 
   <div class="gift-guide-banner__hero">
+    <div class="gift-guide-banner__illustration gift-guide-banner__illustration--top" aria-hidden="true">
+      <img src="{{ 'gift-guide-illustration.svg' | asset_url }}" alt="" width="2000" height="400">
+    </div>
     <div class="gift-guide-banner__content">
       {%- if section.settings.banner_title != blank -%}
         <h1 class="gift-guide-banner__title">{{ section.settings.banner_title | escape }}</h1>
@@ -47,6 +43,9 @@
         </a>
       {%- endif -%}
     </div>
+    <div class="gift-guide-banner__illustration gift-guide-banner__illustration--right" aria-hidden="true">
+      <img src="{{ 'gift-guide-illustration.svg' | asset_url }}" alt="" width="1052" height="400">
+    </div>
   </div>
 
   {%- if section.settings.footer_text != blank -%}
@@ -60,11 +59,6 @@
   "tag": "section",
   "class": "section-gift-guide-banner",
   "settings": [
-    {
-      "type": "image_picker",
-      "id": "background_image",
-      "label": "Hero background illustration"
-    },
     {
       "type": "header",
       "content": "Header"
