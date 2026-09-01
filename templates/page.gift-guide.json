@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "banner": {
+      "type": "gift-guide-banner",
+      "settings": {}
+    }
+  },
+  "order": ["banner"]
+}

@@ -1,0 +1,195 @@
+.gift-guide-banner {
+  --gift-guide-black: #000;
+  --gift-guide-white: #fff;
+  --gift-guide-accent: #fff200;
+  color: var(--gift-guide-black);
+  overflow: hidden;
+}
+
+.gift-guide-banner__header {
+  min-height: 5.5rem;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 4rem;
+  background: #f6f6f6;
+  font-family: Arial, sans-serif;
+}
+
+.gift-guide-banner__brand,
+.gift-guide-banner__tagline {
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.2;
+}
+
+.gift-guide-banner__brand {
+  font-weight: 700;
+  font-size: 2.1rem;
+  letter-spacing: 0;
+}
+
+.gift-guide-banner__menu {
+  display: none;
+  padding: 0;
+  color: var(--gift-guide-black);
+  background: transparent;
+  border: 0;
+}
+
+.gift-guide-banner__tagline {
+  justify-self: center;
+}
+
+.gift-guide-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.6rem;
+  min-width: 18rem;
+  min-height: 4.4rem;
+  padding: 1rem 1.8rem;
+  color: var(--gift-guide-black);
+  background: var(--gift-guide-accent);
+  border: 0;
+  font: 700 1.3rem/1 Arial, sans-serif;
+  text-decoration: none;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.gift-guide-button__arrow {
+  width: 2.6rem;
+  height: 1.4rem;
+  transition: transform 180ms ease;
+}
+
+.gift-guide-button:hover,
+.gift-guide-button:focus-visible {
+  color: var(--gift-guide-white);
+  background: var(--gift-guide-black);
+}
+
+.gift-guide-button:hover .gift-guide-button__arrow,
+.gift-guide-button:focus-visible .gift-guide-button__arrow {
+  transform: translateX(0.5rem);
+}
+
+.gift-guide-banner__header .gift-guide-button {
+  justify-self: end;
+}
+
+.gift-guide-banner__hero {
+  min-height: 61rem;
+  display: flex;
+  align-items: center;
+  padding: 7rem max(4rem, calc((100vw - 124rem) / 2));
+  background-color: var(--gift-guide-white);
+  background-image: var(--gift-guide-background);
+  background-repeat: repeat;
+  background-size: 76rem auto;
+}
+
+.gift-guide-banner__content {
+  width: min(100%, 48rem);
+  padding: 3rem;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.gift-guide-banner__title,
+.gift-guide-banner__description {
+  margin: 0;
+}
+
+.gift-guide-banner__title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(4rem, 5vw, 6.4rem);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.gift-guide-banner__description {
+  max-width: 42rem;
+  margin-top: 2rem;
+  font-family: Arial, sans-serif;
+  font-size: 1.7rem;
+  line-height: 1.45;
+}
+
+.gift-guide-banner__content .gift-guide-button {
+  margin-top: 3rem;
+}
+
+.gift-guide-banner__footer {
+  margin: 0;
+  padding: 1.3rem 1.5rem;
+  color: var(--gift-guide-black);
+  background: #f6f6f6;
+  font: 1.4rem/1.2 Arial, sans-serif;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 749px) {
+  .gift-guide-banner__header {
+    grid-template-columns: auto 1fr;
+    min-height: 7rem;
+    padding: 0 1.5rem;
+  }
+
+  .gift-guide-banner__menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  .gift-guide-banner__brand {
+    justify-self: center;
+    font-size: 2rem;
+  }
+
+  .gift-guide-banner__tagline,
+  .gift-guide-banner__header .gift-guide-button {
+    display: none;
+  }
+
+  .gift-guide-banner__hero {
+    min-height: 49rem;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 5rem 1.5rem 4.5rem;
+    background-size: 50rem auto;
+    background-position: center top;
+  }
+
+  .gift-guide-banner__content {
+    width: 100%;
+    padding: 0;
+    background: transparent;
+    text-align: center;
+  }
+
+  .gift-guide-banner__title {
+    font-family: Arial, sans-serif;
+    font-size: 3.2rem;
+    font-weight: 700;
+  }
+
+  .gift-guide-banner__description {
+    margin: 2rem auto 0;
+    font-size: 1.6rem;
+  }
+
+  .gift-guide-banner__content .gift-guide-button {
+    min-width: 18rem;
+    margin-top: 25rem;
+    color: var(--gift-guide-white);
+    background: var(--gift-guide-black);
+  }
+
+  .gift-guide-banner__footer {
+    font-size: 1.2rem;
+  }
+}
