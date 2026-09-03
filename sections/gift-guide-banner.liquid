@@ -2,10 +2,10 @@
 
 <section
   class="gift-guide-banner"
-  style="--gift-guide-background: url('{{ 'gift-guide-illustration.svg' | asset_url }}');"
   aria-label="{{ section.settings.banner_title | escape }}"
 >
-  <header class="gift-guide-banner__header">
+  <div class="gift-guide-banner__canvas">
+    <header class="gift-guide-banner__header">
     <button class="gift-guide-banner__menu" type="button" aria-label="Menu">
       <svg width="24" height="18" viewBox="0 0 24 18" aria-hidden="true" focusable="false">
         <path d="M1 1h22M1 9h22M1 17h22" stroke="currentColor" stroke-width="2" />
@@ -21,13 +21,13 @@
         </svg>
       </a>
     {%- endif -%}
-  </header>
+    </header>
 
-  <div class="gift-guide-banner__hero">
-    <div class="gift-guide-banner__illustration gift-guide-banner__illustration--top" aria-hidden="true">
-      <img src="{{ 'gift-guide-illustration.svg' | asset_url }}" alt="" width="2000" height="400">
-    </div>
-    <div class="gift-guide-banner__content">
+    <div class="gift-guide-banner__hero">
+      <div class="gift-guide-banner__illustration" aria-hidden="true">
+        <img src="{{ 'gift-guide-custom-illustration.svg' | asset_url }}" alt="" width="1052" height="400">
+      </div>
+      <div class="gift-guide-banner__content">
       {%- if section.settings.banner_title != blank -%}
         <h1 class="gift-guide-banner__title">{{ section.settings.banner_title | escape }}</h1>
       {%- endif -%}
@@ -42,15 +42,13 @@
           </svg>
         </a>
       {%- endif -%}
+      </div>
     </div>
-    <div class="gift-guide-banner__illustration gift-guide-banner__illustration--right" aria-hidden="true">
-      <img src="{{ 'gift-guide-illustration.svg' | asset_url }}" alt="" width="1052" height="400">
-    </div>
-  </div>
 
-  {%- if section.settings.footer_text != blank -%}
-    <p class="gift-guide-banner__footer">{{ section.settings.footer_text | escape }}</p>
-  {%- endif -%}
+    {%- if section.settings.footer_text != blank -%}
+      <p class="gift-guide-banner__footer">{{ section.settings.footer_text | escape }}</p>
+    {%- endif -%}
+  </div>
 </section>
 
 {% schema %}
@@ -100,7 +98,7 @@
       "type": "richtext",
       "id": "banner_description",
       "label": "Description",
-      "default": "<p>Discover Joy: Your Ultimate Holiday Gift Destination.</p>"
+      "default": "<p>Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.</p>"
     },
     {
       "type": "text",
