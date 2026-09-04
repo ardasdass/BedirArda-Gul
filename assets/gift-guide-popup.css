@@ -16,6 +16,7 @@
 .gift-guide-popup__card {
   position: relative;
   display: block;
+  box-sizing: border-box;
   width: 31.1rem;
   max-width: 100%;
   max-height: 90vh;
@@ -112,35 +113,52 @@
   color: #000;
 }
 
-.gift-guide-popup__swatches {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
+.gift-guide-popup__trigger {
+  display: block;
   margin-bottom: 1.6rem;
 }
 
-.gift-guide-popup__swatch {
+.gift-guide-popup__trigger-values {
+  display: flex;
+  width: 100%;
+  min-height: 3.6rem;
+  border: 0.5px solid #000;
+}
+
+.gift-guide-popup__trigger-option {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.4rem 0.8rem;
-  border: 0.5px solid #000;
+  justify-content: flex-start;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 1.2rem;
+  border: 0;
+  border-left: 0.5px solid #000;
   background: #fff;
-  font: 400 1.4rem/1 'Jost', Arial, sans-serif;
-  letter-spacing: -0.02em;
+  font: 400 1.6rem/1 'Jost', Arial, sans-serif;
   text-transform: capitalize;
   color: #000;
   cursor: pointer;
 }
 
-.gift-guide-popup__swatch-color {
-  width: 1.6rem;
-  height: 1.6rem;
-  border: 0.5px solid #000;
-  background: var(--swatch-color, #fff);
+.gift-guide-popup__trigger-option:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
-.gift-guide-popup__swatch[aria-pressed='true'] {
+.gift-guide-popup__trigger-option:first-child {
+  border-left: 0;
+}
+
+.gift-guide-popup__trigger-color {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0.5rem;
+  background: var(--trigger-color, transparent);
+}
+
+.gift-guide-popup__trigger-option[aria-pressed='true'] {
   background: #000;
   color: #fff;
 }
@@ -164,6 +182,7 @@
 }
 
 .gift-guide-popup__size-select summary {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -180,8 +199,18 @@
   display: none;
 }
 
+.gift-guide-popup__size-select summary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 4rem;
+  bottom: 0;
+  border-left: 0.5px solid #000;
+}
+
 .gift-guide-popup__size-select summary::after {
   content: '';
+  margin-right: 0.2rem;
   width: 0.8rem;
   height: 0.8rem;
   border-right: 0.15rem solid #000;
@@ -216,7 +245,7 @@
   font-size: 1.6rem;
   text-transform: uppercase;
   letter-spacing: -0.02em;
-  text-align: left;
+  text-align: center;
   color: #000;
   cursor: pointer;
 }

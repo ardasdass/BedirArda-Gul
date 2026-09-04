@@ -61,7 +61,8 @@ class GiftGuideProductPopup extends HTMLElement {
     this.variantPrices = JSON.parse(this.querySelector('[data-gift-guide-variant-prices]').textContent);
     this.selectedOptions = this.getInitialOptions();
 
-    this.swatchButtons = Array.from(this.querySelectorAll('[data-gift-guide-swatch]'));
+    this.optionButtons = Array.from(this.querySelectorAll('[data-gift-guide-option]'));
+    this.triggerButtons = Array.from(this.querySelectorAll('.gift-guide-popup__trigger-option'));
     this.sizeButtons = Array.from(this.querySelectorAll('[data-gift-guide-size-option]'));
     this.sizeDetails = this.querySelector('[data-gift-guide-size-select]');
     this.sizeSummary = this.querySelector('[data-gift-guide-size-current]');
@@ -69,7 +70,7 @@ class GiftGuideProductPopup extends HTMLElement {
     this.priceElement = this.querySelector('[data-gift-guide-popup-price]');
     this.imageElement = this.querySelector('[data-gift-guide-popup-image]');
 
-    this.swatchButtons.forEach((button) => button.addEventListener('click', this.onSwatchClick.bind(this)));
+    this.triggerButtons.forEach((button) => button.addEventListener('click', this.onTriggerClick.bind(this)));
     this.sizeButtons.forEach((button) => button.addEventListener('click', this.onSizeClick.bind(this)));
     this.addToCartButton?.addEventListener('click', this.onAddToCart.bind(this));
 
@@ -79,7 +80,11 @@ class GiftGuideProductPopup extends HTMLElement {
   getInitialOptions() {
     const variant =
       this.productData.variants.find((candidate) => candidate.available) || this.productData.variants[0];
-    return variant ? [...variant.options] : [];
+    const options = variant ? [...variant.options] : [];
+    const sizeIndex = Number(this.querySelector('gift-guide-size-options')?.dataset.optionIndex);
+
+    if (Number.isInteger(sizeIndex)) options[sizeIndex] = null;
+    return options;
   }
 
   findVariant(options) {
@@ -88,12 +93,14 @@ class GiftGuideProductPopup extends HTMLElement {
     );
   }
 
-  onSwatchClick(event) {
+  onTriggerClick(event) {
     const button = event.currentTarget;
+    if (button.disabled) return;
+
     const index = Number(button.dataset.optionIndex);
     this.selectedOptions[index] = button.dataset.value;
 
-    this.swatchButtons
+    this.triggerButtons
       .filter((candidate) => Number(candidate.dataset.optionIndex) === index)
       .forEach((candidate) => candidate.setAttribute('aria-pressed', String(candidate === button)));
 
@@ -115,7 +122,8 @@ class GiftGuideProductPopup extends HTMLElement {
   }
 
   updateVariantState() {
-    const variant = this.findVariant(this.selectedOptions);
+    const hasUnselectedOption = this.selectedOptions.some((value) => value == null);
+    const variant = hasUnselectedOption ? null : this.findVariant(this.selectedOptions);
     this.currentVariant = variant;
 
     if (this.priceElement && variant) {
@@ -126,12 +134,16 @@ class GiftGuideProductPopup extends HTMLElement {
       this.imageElement.src = variant.featured_image.src;
     }
 
-    this.sizeButtons.forEach((button) => {
+    this.optionButtons.forEach((button) => {
       const index = Number(button.dataset.optionIndex);
       const testOptions = [...this.selectedOptions];
       testOptions[index] = button.dataset.value;
-      const match = this.findVariant(testOptions);
-      button.disabled = !match || !match.available;
+      const hasAvailableMatch = this.productData.variants.some(
+        (candidate) =>
+          candidate.available &&
+          candidate.options.every((value, optionIndex) => testOptions[optionIndex] == null || value === testOptions[optionIndex])
+      );
+      button.disabled = !hasAvailableMatch;
     });
 
     if (this.addToCartButton) {

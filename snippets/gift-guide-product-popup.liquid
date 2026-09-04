@@ -9,15 +9,14 @@
 {% endcomment %}
 {%- liquid
   assign popup_variant = product.selected_or_first_available_variant
-  assign color_option_index = -1
+  assign trigger_option_index = -1
   assign size_option_index = -1
   for option in product.options_with_values
     assign option_name_down = option.name | downcase
-    if option_name_down contains 'color' or option_name_down contains 'colour'
-      assign color_option_index = forloop.index0
-    endif
     if option_name_down contains 'size'
       assign size_option_index = forloop.index0
+    elsif trigger_option_index == -1
+      assign trigger_option_index = forloop.index0
     endif
   endfor
 -%}
@@ -54,53 +53,21 @@
     <h3 class="gift-guide-popup__title" data-gift-guide-popup-title>{{ product.title | escape }}</h3>
     <p class="gift-guide-popup__price" data-gift-guide-popup-price>{{ popup_variant.price | money }}</p>
 
-    {%- if color_option_index > -1 -%}
-      <p class="gift-guide-popup__label">{{ product.options_with_values[color_option_index].name }}</p>
-      <div class="gift-guide-popup__swatches" role="group" aria-label="{{ product.options_with_values[color_option_index].name }}">
-        {%- for value in product.options_with_values[color_option_index].values -%}
-          <button
-            type="button"
-            class="gift-guide-popup__swatch"
-            data-gift-guide-swatch
-            data-option-index="{{ color_option_index }}"
-            data-value="{{ value | escape }}"
-            style="--swatch-color: {{ value | downcase | strip }};"
-            aria-pressed="{% if popup_variant.options[color_option_index] == value %}true{% else %}false{% endif %}"
-          >
-            <span class="gift-guide-popup__swatch-color" aria-hidden="true"></span>
-            {{ value }}
-          </button>
-        {%- endfor -%}
-      </div>
+    {%- if trigger_option_index > -1 -%}
+      {%- render 'gift-guide-trigger-options',
+        option: product.options_with_values[trigger_option_index],
+        option_index: trigger_option_index,
+        selected_value: popup_variant.options[trigger_option_index]
+      -%}
     {%- endif -%}
 
     <p class="gift-guide-popup__description">{{ product.description | strip_html | truncatewords: 30 }}</p>
 
     {%- if size_option_index > -1 -%}
-      <div class="gift-guide-popup__size">
-        <p class="gift-guide-popup__label">{{ product.options_with_values[size_option_index].name }}</p>
-        <details class="gift-guide-popup__size-select" data-gift-guide-size-select>
-          <summary data-gift-guide-size-current>
-            {{ popup_variant.options[size_option_index] | default: 'Choose your size' }}
-          </summary>
-          <ul class="gift-guide-popup__size-list">
-            {%- for value in product.options_with_values[size_option_index].values -%}
-              <li>
-                <button
-                  type="button"
-                  class="gift-guide-popup__size-option"
-                  data-gift-guide-size-option
-                  data-option-index="{{ size_option_index }}"
-                  data-value="{{ value | escape }}"
-                  aria-pressed="{% if popup_variant.options[size_option_index] == value %}true{% else %}false{% endif %}"
-                >
-                  {{ value }}
-                </button>
-              </li>
-            {%- endfor -%}
-          </ul>
-        </details>
-      </div>
+      {%- render 'gift-guide-size-options',
+        option: product.options_with_values[size_option_index],
+        option_index: size_option_index
+      -%}
     {%- endif -%}
 
     <button

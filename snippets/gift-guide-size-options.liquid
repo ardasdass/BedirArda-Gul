@@ -1,0 +1,31 @@
+{% comment %}
+  Renders a dropdown variant option picker for a gift-guide product.
+
+  Accepts:
+  - option: {Object} Product option with values
+  - option_index: {Number} Zero-based product option index
+{% endcomment %}
+
+<gift-guide-size-options class="gift-guide-popup__size" data-option-index="{{ option_index }}">
+  <p class="gift-guide-popup__label">{{ option.name }}</p>
+  <details class="gift-guide-popup__size-select" data-gift-guide-size-select>
+    <summary data-gift-guide-size-current>Choose your size</summary>
+    <ul class="gift-guide-popup__size-list">
+      {%- for value in option.values -%}
+        <li>
+          <button
+            type="button"
+            class="gift-guide-popup__size-option"
+            data-gift-guide-option
+            data-gift-guide-size-option
+            data-option-index="{{ option_index }}"
+            data-value="{{ value | escape }}"
+            aria-pressed="false"
+          >
+            {{ value }}
+          </button>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </details>
+</gift-guide-size-options>

@@ -1,0 +1,31 @@
+{% comment %}
+  Renders a segmented variant option picker for a gift-guide product.
+
+  Accepts:
+  - option: {Object} Product option with values
+  - option_index: {Number} Zero-based product option index
+  - selected_value: {String} Initially selected option value
+{% endcomment %}
+
+<gift-guide-trigger-options class="gift-guide-popup__trigger">
+  <p class="gift-guide-popup__label">{{ option.name }}</p>
+  <div class="gift-guide-popup__trigger-values" role="group" aria-label="{{ option.name | escape }}">
+    {%- for value in option.values -%}
+      <button
+        type="button"
+        class="gift-guide-popup__trigger-option"
+        data-gift-guide-option
+        data-option-index="{{ option_index }}"
+        data-value="{{ value | escape }}"
+        aria-pressed="{% if selected_value == value %}true{% else %}false{% endif %}"
+      >
+        <span
+          class="gift-guide-popup__trigger-color"
+          style="--trigger-color: {{ value | downcase | strip }};"
+          aria-hidden="true"
+        ></span>
+        <span>{{ value }}</span>
+      </button>
+    {%- endfor -%}
+  </div>
+</gift-guide-trigger-options>
