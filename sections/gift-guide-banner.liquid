@@ -1,38 +1,69 @@
 {{ 'gift-guide-banner.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gift-guide-banner.js' | asset_url }}" defer="defer"></script>
 
 <section
   class="gift-guide-banner"
   aria-label="{{ section.settings.banner_title | escape }}"
+  data-gift-guide-banner
 >
   <div class="gift-guide-banner__canvas">
     <header class="gift-guide-banner__header">
-    <button class="gift-guide-banner__menu" type="button" aria-label="Menu">
-      <svg width="24" height="18" viewBox="0 0 24 18" aria-hidden="true" focusable="false">
-        <path d="M1 1h22M1 9h22M1 17h22" stroke="currentColor" stroke-width="2" />
-      </svg>
-    </button>
-    <p class="gift-guide-banner__brand">{{ section.settings.store_name | escape }}</p>
-    <p class="gift-guide-banner__tagline">{{ section.settings.catchphrase | escape }}</p>
-    {%- if section.settings.header_button_label != blank -%}
-      <a class="gift-guide-button" href="{{ section.settings.header_button_link }}">
-        <span>{{ section.settings.header_button_label | escape }}</span>
-        <svg class="gift-guide-button__arrow" viewBox="0 0 28 14" aria-hidden="true" focusable="false">
-          <path d="M0 7h25M19 1l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" />
-        </svg>
-      </a>
-    {%- endif -%}
+      <button
+        class="gift-guide-banner__menu"
+        type="button"
+        aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="GiftGuideMenu-{{ section.id }}"
+        data-gift-guide-menu-toggle
+      >
+        <span class="gift-guide-banner__menu-icon" aria-hidden="true"></span>
+      </button>
+      <p class="gift-guide-banner__brand">{{ section.settings.store_name | escape }}</p>
+      <p class="gift-guide-banner__tagline">{{ section.settings.catchphrase | escape }}</p>
+      {%- if section.settings.header_button_label != blank -%}
+        <a class="gift-guide-button" href="{{ section.settings.header_button_link }}">
+          <span>{{ section.settings.header_button_label | escape }}</span>
+          <svg class="gift-guide-button__arrow" viewBox="0 0 28 14" aria-hidden="true" focusable="false">
+            <path d="M0 7h25M19 1l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </a>
+      {%- endif -%}
     </header>
+
+    <div class="gift-guide-banner__mobile-menu" id="GiftGuideMenu-{{ section.id }}" hidden data-gift-guide-menu-panel>
+      <p>{{ section.settings.catchphrase | escape }}</p>
+      {%- if section.settings.header_button_label != blank -%}
+        <a class="gift-guide-button" href="{{ section.settings.header_button_link }}">
+          <span>{{ section.settings.header_button_label | escape }}</span>
+          <svg class="gift-guide-button__arrow" viewBox="0 0 28 14" aria-hidden="true" focusable="false">
+            <path d="M0 7h25M19 1l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </a>
+      {%- endif -%}
+    </div>
 
     <div class="gift-guide-banner__hero">
       <div class="gift-guide-banner__illustration" aria-hidden="true">
-        <img src="{{ 'gift-guide-illustration-desktop.svg' | asset_url }}" alt="" width="1052" height="400">
+        <picture>
+          <source media="(max-width: 749px)" srcset="{{ 'gift-guide-illustration-mobile.svg' | asset_url }}">
+          <img src="{{ 'gift-guide-illustration-desktop.svg' | asset_url }}" alt="" width="1052" height="400">
+        </picture>
       </div>
       <div class="gift-guide-banner__content">
       {%- if section.settings.banner_title != blank -%}
         <h1 class="gift-guide-banner__title">{{ section.settings.banner_title | escape }}</h1>
       {%- endif -%}
       {%- if section.settings.banner_description != blank -%}
-        <div class="gift-guide-banner__description">{{ section.settings.banner_description }}</div>
+        <div class="gift-guide-banner__description gift-guide-banner__description--desktop">
+          {{ section.settings.banner_description }}
+        </div>
+        <div class="gift-guide-banner__description gift-guide-banner__description--mobile">
+          {%- if section.settings.mobile_banner_description != blank -%}
+            {{ section.settings.mobile_banner_description }}
+          {%- else -%}
+            {{ section.settings.banner_description }}
+          {%- endif -%}
+        </div>
       {%- endif -%}
       {%- if section.settings.banner_button_label != blank -%}
         <a class="gift-guide-button" href="{{ section.settings.banner_button_link }}">
@@ -99,6 +130,12 @@
       "id": "banner_description",
       "label": "Description",
       "default": "<p>Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "mobile_banner_description",
+      "label": "Mobile description",
+      "default": "<p>Discover Joy: Your Ultimate Holiday Gift Destination.</p>"
     },
     {
       "type": "text",
