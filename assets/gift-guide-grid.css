@@ -1,5 +1,6 @@
 .gift-guide-grid {
-  padding: clamp(4rem, 2.7778vw, 10.6667rem) 0;
+  /* top spacing is handled by .gift-guide-page's gap */
+  padding: 0 0 clamp(4rem, 2.7778vw, 10.6667rem);
   background: var(--gift-guide-white, #fff);
   color: var(--gift-guide-black, #000);
 }
