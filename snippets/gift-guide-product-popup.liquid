@@ -1,0 +1,135 @@
+{% comment %}
+  Renders a quick-view popup for a single gift-guide grid product.
+  Accepts:
+  - product: {Object} Product Liquid object
+  - popup_id: {String} unique DOM id for this popup
+
+  Usage:
+  {% render 'gift-guide-product-popup', product: product, popup_id: popup_id %}
+{% endcomment %}
+{%- liquid
+  assign popup_variant = product.selected_or_first_available_variant
+  assign color_option_index = -1
+  assign size_option_index = -1
+  for option in product.options_with_values
+    assign option_name_down = option.name | downcase
+    if option_name_down contains 'color' or option_name_down contains 'colour'
+      assign color_option_index = forloop.index0
+    endif
+    if option_name_down contains 'size'
+      assign size_option_index = forloop.index0
+    endif
+  endfor
+-%}
+<div class="gift-guide-popup" id="{{ popup_id }}" hidden>
+  <gift-guide-product-popup class="gift-guide-popup__card" role="dialog" aria-modal="true" aria-label="{{ product.title | escape }}">
+    <button type="button" class="gift-guide-popup__close" data-gift-guide-popup-close aria-label="Close">
+      <span class="gift-guide-popup__close-icon" aria-hidden="true"></span>
+    </button>
+
+    <div class="gift-guide-popup__media">
+      {%- if popup_variant.featured_media != blank -%}
+        <img
+          data-gift-guide-popup-image
+          src="{{ popup_variant.featured_media | image_url: width: 240 }}"
+          alt="{{ popup_variant.featured_media.alt | default: product.title | escape }}"
+          width="120"
+          height="140"
+          loading="lazy"
+        >
+      {%- elsif product.featured_media != blank -%}
+        <img
+          data-gift-guide-popup-image
+          src="{{ product.featured_media | image_url: width: 240 }}"
+          alt="{{ product.title | escape }}"
+          width="120"
+          height="140"
+          loading="lazy"
+        >
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'gift-guide-popup__image-placeholder' }}
+      {%- endif -%}
+    </div>
+
+    <h3 class="gift-guide-popup__title" data-gift-guide-popup-title>{{ product.title | escape }}</h3>
+    <p class="gift-guide-popup__price" data-gift-guide-popup-price>{{ popup_variant.price | money }}</p>
+
+    {%- if color_option_index > -1 -%}
+      <p class="gift-guide-popup__label">{{ product.options_with_values[color_option_index].name }}</p>
+      <div class="gift-guide-popup__swatches" role="group" aria-label="{{ product.options_with_values[color_option_index].name }}">
+        {%- for value in product.options_with_values[color_option_index].values -%}
+          <button
+            type="button"
+            class="gift-guide-popup__swatch"
+            data-gift-guide-swatch
+            data-option-index="{{ color_option_index }}"
+            data-value="{{ value | escape }}"
+            style="--swatch-color: {{ value | downcase | strip }};"
+            aria-pressed="{% if popup_variant.options[color_option_index] == value %}true{% else %}false{% endif %}"
+          >
+            <span class="gift-guide-popup__swatch-color" aria-hidden="true"></span>
+            {{ value }}
+          </button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <p class="gift-guide-popup__description">{{ product.description | strip_html | truncatewords: 30 }}</p>
+
+    {%- if size_option_index > -1 -%}
+      <div class="gift-guide-popup__size">
+        <p class="gift-guide-popup__label">{{ product.options_with_values[size_option_index].name }}</p>
+        <details class="gift-guide-popup__size-select" data-gift-guide-size-select>
+          <summary data-gift-guide-size-current>
+            {{ popup_variant.options[size_option_index] | default: 'Choose your size' }}
+          </summary>
+          <ul class="gift-guide-popup__size-list">
+            {%- for value in product.options_with_values[size_option_index].values -%}
+              <li>
+                <button
+                  type="button"
+                  class="gift-guide-popup__size-option"
+                  data-gift-guide-size-option
+                  data-option-index="{{ size_option_index }}"
+                  data-value="{{ value | escape }}"
+                  aria-pressed="{% if popup_variant.options[size_option_index] == value %}true{% else %}false{% endif %}"
+                >
+                  {{ value }}
+                </button>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </details>
+      </div>
+    {%- endif -%}
+
+    <button
+      type="button"
+      class="gift-guide-popup__add-to-cart"
+      data-gift-guide-add-to-cart
+      data-add-text="{{ 'products.product.add_to_cart' | t }}"
+      data-sold-out-text="{{ 'products.product.sold_out' | t }}"
+      {% if popup_variant == null or popup_variant.available == false %}disabled{% endif %}
+    >
+      <span data-gift-guide-add-to-cart-text>
+        {%- if popup_variant == null or popup_variant.available == false -%}
+          {{ 'products.product.sold_out' | t }}
+        {%- else -%}
+          {{ 'products.product.add_to_cart' | t }}
+        {%- endif -%}
+      </span>
+      <span class="gift-guide-popup__add-to-cart-arrow" aria-hidden="true"></span>
+    </button>
+
+    <script type="application/json" data-gift-guide-product-json>
+      {{ product | json }}
+    </script>
+    <script type="application/json" data-gift-guide-variant-prices>
+      {
+        {%- for variant in product.variants -%}
+          "{{ variant.id }}": {{ variant.price | money | json }}{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      }
+    </script>
+  </gift-guide-product-popup>
+</div>
