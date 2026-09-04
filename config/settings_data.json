@@ -160,17 +160,15 @@
           "gift_guide_product_1": {
             "type": "product",
             "settings": {
-              "product": "",
-              "image": "",
-              "hotspot_x": 59,
-              "hotspot_y": 54
+              "product": "black-leather-bag",
+              "hotspot_x": 43,
+              "hotspot_y": 70
             }
           },
           "gift_guide_product_2": {
             "type": "product",
             "settings": {
-              "product": "",
-              "image": "",
+              "product": "blue-silk-tuxedo",
               "hotspot_x": 82,
               "hotspot_y": 50
             }
@@ -178,8 +176,7 @@
           "gift_guide_product_3": {
             "type": "product",
             "settings": {
-              "product": "",
-              "image": "",
+              "product": "chequered-red-shirt",
               "hotspot_x": 60,
               "hotspot_y": 18
             }
@@ -187,8 +184,7 @@
           "gift_guide_product_4": {
             "type": "product",
             "settings": {
-              "product": "",
-              "image": "",
+              "product": "classic-leather-jacket",
               "hotspot_x": 70,
               "hotspot_y": 16
             }
@@ -196,8 +192,7 @@
           "gift_guide_product_5": {
             "type": "product",
             "settings": {
-              "product": "",
-              "image": "",
+              "product": "classic-varsity-top",
               "hotspot_x": 49,
               "hotspot_y": 23
             }
@@ -205,8 +200,7 @@
           "gift_guide_product_6": {
             "type": "product",
             "settings": {
-              "product": "",
-              "image": "",
+              "product": "dark-denim-top",
               "hotspot_x": 74,
               "hotspot_y": 37
             }
