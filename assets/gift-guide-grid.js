@@ -81,8 +81,10 @@ class GiftGuideProductPopup extends HTMLElement {
     const variant =
       this.productData.variants.find((candidate) => candidate.available) || this.productData.variants[0];
     const options = variant ? [...variant.options] : [];
+    const firstTrigger = this.querySelector('.gift-guide-popup__trigger-option');
     const sizeIndex = Number(this.querySelector('gift-guide-size-options')?.dataset.optionIndex);
 
+    if (firstTrigger) options[Number(firstTrigger.dataset.optionIndex)] = firstTrigger.dataset.value;
     if (Number.isInteger(sizeIndex)) options[sizeIndex] = null;
     return options;
   }
@@ -102,7 +104,11 @@ class GiftGuideProductPopup extends HTMLElement {
 
     this.triggerButtons
       .filter((candidate) => Number(candidate.dataset.optionIndex) === index)
-      .forEach((candidate) => candidate.setAttribute('aria-pressed', String(candidate === button)));
+      .forEach((candidate) => {
+        const isActive = candidate === button;
+        candidate.setAttribute('aria-pressed', String(isActive));
+        candidate.classList.toggle('is-active', isActive);
+      });
 
     this.updateVariantState();
   }
@@ -125,6 +131,19 @@ class GiftGuideProductPopup extends HTMLElement {
     const hasUnselectedOption = this.selectedOptions.some((value) => value == null);
     const variant = hasUnselectedOption ? null : this.findVariant(this.selectedOptions);
     this.currentVariant = variant;
+
+    this.triggerButtons.forEach((button) => {
+      const index = Number(button.dataset.optionIndex);
+      const isActive = this.selectedOptions[index] === button.dataset.value;
+      button.setAttribute('aria-pressed', String(isActive));
+      button.classList.toggle('is-active', isActive);
+
+      if (isActive) {
+        const group = button.closest('.gift-guide-popup__trigger-values');
+        const activeIndex = this.triggerButtons.indexOf(button);
+        group?.style.setProperty('--trigger-active-index', activeIndex);
+      }
+    });
 
     if (this.priceElement && variant) {
       this.priceElement.textContent = this.variantPrices[variant.id] || this.priceElement.textContent;
@@ -151,7 +170,7 @@ class GiftGuideProductPopup extends HTMLElement {
       const available = Boolean(variant && variant.available);
       this.addToCartButton.disabled = !available;
       if (textElement) {
-        textElement.textContent = available
+        textElement.textContent = available || hasUnselectedOption
           ? this.addToCartButton.dataset.addText
           : this.addToCartButton.dataset.soldOutText;
       }

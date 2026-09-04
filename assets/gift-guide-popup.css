@@ -18,12 +18,12 @@
   display: block;
   box-sizing: border-box;
   width: 31.1rem;
-  max-width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
+  height: 44.7rem;
+  max-width: calc(100vw - 4rem);
+  overflow: visible;
   background: #fff;
   box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
-  padding: 2rem;
+  padding: 0;
   font-family: 'Jost', Arial, sans-serif;
   color: #000;
 }
@@ -31,7 +31,8 @@
 .gift-guide-popup__close {
   position: absolute;
   top: 1.2rem;
-  right: 1.2rem;
+  right: 1.6rem;
+  z-index: 5;
   width: 2.2rem;
   height: 2.2rem;
   padding: 0;
@@ -74,10 +75,12 @@
 }
 
 .gift-guide-popup__media {
-  float: left;
+  position: absolute;
+  top: 3.6rem;
+  left: 1.7rem;
   width: 12rem;
   height: 14rem;
-  margin: 0 1.6rem 1.6rem 0;
+  margin: 0;
   background: #f5f5f5;
   overflow: hidden;
 }
@@ -98,35 +101,63 @@
 }
 
 .gift-guide-popup__title {
-  margin: 0 0 0.4rem;
+  position: absolute;
+  top: 4.9rem;
+  left: 14.5rem;
+  right: 2rem;
+  margin: 0;
   font-size: 1.6rem;
   font-weight: 300;
   line-height: 1.2;
+  letter-spacing: 0;
   color: #000;
 }
 
 .gift-guide-popup__price {
-  margin: 0 0 1rem;
+  position: absolute;
+  top: 8.8rem;
+  left: 14.5rem;
+  right: 2rem;
+  margin: 0;
   font-family: 'Lustria', Georgia, serif;
   font-size: 1.6rem;
   line-height: 1.2;
+  letter-spacing: 0;
   color: #000;
 }
 
 .gift-guide-popup__trigger {
+  position: absolute;
+  top: 18.6rem;
+  left: 2rem;
+  z-index: 2;
   display: block;
-  margin-bottom: 1.6rem;
+  width: 27.1rem;
+  margin: 0;
 }
 
 .gift-guide-popup__trigger-values {
+  position: relative;
   display: flex;
   width: 100%;
-  min-height: 3.6rem;
+  height: 4rem;
   border: 0.5px solid #000;
+  overflow: hidden;
+}
+
+.gift-guide-popup__trigger-indicator {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(100% / var(--trigger-option-count));
+  background: #000;
+  transform: translateX(calc(var(--trigger-active-index) * 100%));
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
 }
 
 .gift-guide-popup__trigger-option {
   position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -135,8 +166,9 @@
   padding: 0 1.2rem;
   border: 0;
   border-left: 0.5px solid #000;
-  background: #fff;
-  font: 400 1.6rem/1 'Jost', Arial, sans-serif;
+  background: transparent;
+  font: 400 1.8rem/1 'Jost', Arial, sans-serif;
+  letter-spacing: 0;
   text-transform: capitalize;
   color: #000;
   cursor: pointer;
@@ -158,23 +190,43 @@
   background: var(--trigger-color, transparent);
 }
 
-.gift-guide-popup__trigger-option[aria-pressed='true'] {
-  background: #000;
+.gift-guide-popup__trigger-option[aria-pressed='true'],
+.gift-guide-popup__trigger-option.is-active {
   color: #fff;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .gift-guide-popup__trigger-indicator {
+    transition: none;
+  }
+}
+
 .gift-guide-popup__description {
-  clear: both;
-  margin: 0 0 1.6rem;
+  position: absolute;
+  top: 11.9rem;
+  left: 14.5rem;
+  width: 14.6rem;
+  height: 6rem;
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
   font-size: 1.4rem;
   font-weight: 300;
   line-height: 1.1;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
   color: #000;
 }
 
 .gift-guide-popup__size {
-  margin-bottom: 1.6rem;
+  position: absolute;
+  top: 26.2rem;
+  left: 2rem;
+  z-index: 4;
+  display: block;
+  width: 27.1rem;
+  margin: 0;
 }
 
 .gift-guide-popup__size-select {
@@ -186,11 +238,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 3.6rem;
+  height: 4rem;
   padding: 0 1.2rem;
   border: 0.5px solid #000;
   font-size: 1.6rem;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   cursor: pointer;
   list-style: none;
 }
@@ -216,6 +268,11 @@
   border-right: 0.15rem solid #000;
   border-bottom: 0.15rem solid #000;
   transform: rotate(45deg);
+  transition: transform 180ms ease;
+}
+
+.gift-guide-popup__size-select[open] summary::after {
+  transform: rotate(225deg);
 }
 
 .gift-guide-popup__size-list {
@@ -223,11 +280,11 @@
   left: 0;
   right: 0;
   top: 100%;
-  z-index: 1;
+  z-index: 10;
   margin: 0;
   padding: 0;
   list-style: none;
-  max-height: 16rem;
+  max-height: 18.2rem;
   overflow-y: auto;
   background: #fff;
   border: 1px solid #000;
@@ -244,7 +301,7 @@
   background: #fff;
   font-size: 1.6rem;
   text-transform: uppercase;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   text-align: center;
   color: #000;
   cursor: pointer;
@@ -261,11 +318,14 @@
 }
 
 .gift-guide-popup__add-to-cart {
+  position: absolute;
+  left: 2rem;
+  bottom: 2.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1.2rem;
-  width: 100%;
+  width: 27.1rem;
   height: 4.5rem;
   border: 0;
   background: #000;
@@ -277,7 +337,7 @@
 }
 
 .gift-guide-popup__add-to-cart[disabled] {
-  opacity: 0.5;
+  opacity: 1;
   cursor: not-allowed;
 }
 
@@ -302,6 +362,6 @@
 
 @media screen and (max-width: 749px) {
   .gift-guide-popup__card {
-    width: 100%;
+    width: 31.1rem;
   }
 }

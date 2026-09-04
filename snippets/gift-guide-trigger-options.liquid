@@ -4,24 +4,39 @@
   Accepts:
   - option: {Object} Product option with values
   - option_index: {Number} Zero-based product option index
-  - selected_value: {String} Initially selected option value
 {% endcomment %}
 
 <gift-guide-trigger-options class="gift-guide-popup__trigger">
   <p class="gift-guide-popup__label">{{ option.name }}</p>
-  <div class="gift-guide-popup__trigger-values" role="group" aria-label="{{ option.name | escape }}">
+  <div
+    class="gift-guide-popup__trigger-values"
+    role="group"
+    aria-label="{{ option.name | escape }}"
+    style="--trigger-option-count: {{ option.values.size }}; --trigger-active-index: 0;"
+  >
+    <span class="gift-guide-popup__trigger-indicator" aria-hidden="true"></span>
     {%- for value in option.values -%}
+      {%- liquid
+        assign escaped_value = value | escape
+        assign swatch_value = blank
+        if value.swatch.image
+          assign swatch_image = value.swatch.image | image_url: width: 50
+          assign swatch_value = 'url(' | append: swatch_image | append: ')'
+        elsif value.swatch.color
+          assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+        endif
+      -%}
       <button
         type="button"
         class="gift-guide-popup__trigger-option"
         data-gift-guide-option
         data-option-index="{{ option_index }}"
-        data-value="{{ value | escape }}"
-        aria-pressed="{% if selected_value == value %}true{% else %}false{% endif %}"
+        data-value="{{ escaped_value }}"
+        aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
       >
         <span
           class="gift-guide-popup__trigger-color"
-          style="--trigger-color: {{ value | downcase | strip }};"
+          style="--trigger-color: {% if swatch_value != blank %}{{ swatch_value }}{% else %}{{ escaped_value | downcase }}{% endif %};"
           aria-hidden="true"
         ></span>
         <span>{{ value }}</span>

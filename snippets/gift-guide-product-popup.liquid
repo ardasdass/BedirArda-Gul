@@ -15,7 +15,7 @@
     assign option_name_down = option.name | downcase
     if option_name_down contains 'size'
       assign size_option_index = forloop.index0
-    elsif trigger_option_index == -1
+    elsif option_name_down contains 'color' or option_name_down contains 'colour' or option_name_down contains 'renk'
       assign trigger_option_index = forloop.index0
     endif
   endfor
@@ -56,8 +56,7 @@
     {%- if trigger_option_index > -1 -%}
       {%- render 'gift-guide-trigger-options',
         option: product.options_with_values[trigger_option_index],
-        option_index: trigger_option_index,
-        selected_value: popup_variant.options[trigger_option_index]
+        option_index: trigger_option_index
       -%}
     {%- endif -%}
 
@@ -89,7 +88,18 @@
     </button>
 
     <script type="application/json" data-gift-guide-product-json>
-      {{ product | json }}
+      {
+        "variants": [
+          {%- for variant in product.variants -%}
+            {
+              "id": {{ variant.id | json }},
+              "available": {{ variant.available | json }},
+              "options": {{ variant.options | json }},
+              "featured_image": {% if variant.featured_image != blank %}{ "src": {{ variant.featured_image | image_url: width: 240 | json }} }{% else %}null{% endif %}
+            }{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ]
+      }
     </script>
     <script type="application/json" data-gift-guide-variant-prices>
       {
